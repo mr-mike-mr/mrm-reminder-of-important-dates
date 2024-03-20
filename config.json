@@ -1,1 +1,0 @@
-{"REFRESH_TIME": 43200, "NOTIFY": {"EMAIL": "false", "SMS": "false", "DISCORD": "false"}, "SMTP_SERVER": null, "SMTP_PORT": null, "SMTP_EMAIL": null, "SMTP_PASSWORD": null, "CLIENT_EMAIL": null, "SMS_TOKEN": null, "SMS_SID": null, "SMS_TWILIO_PHONE": null, "SMS_CLIENT_PHONE": null, "DISCORD_WEBHOOK": null}
