@@ -1,5 +1,9 @@
 # MRM Reminder of Important Dates
 
+![Showcase](https://i.imgur.com/eB8qY0L.png)
+
+## INFO
+
 - Server application that notifies you of important dates.
 - The application is written in python and it's my first big application.
 - The application also has a built-in database client, configurator and config manager.
@@ -23,7 +27,7 @@
 
 ## SHOWCASE
 
-- **SOON**
+- [YouTube](https://www.youtube.com/watch?v=LR8n6aVRQ28&feature=youtu.be)
 
 ## INSTALL GUID
 

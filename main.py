@@ -3,9 +3,7 @@ try: # try import packages
     # EXTERNAL
     from time import sleep
     from json import load
-    import sys
     # OWN
-    sys.path.append("utils")
     import functions
     from gui import GuiPanel
     from cli import CliPanel
