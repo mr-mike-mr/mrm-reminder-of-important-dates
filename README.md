@@ -15,7 +15,7 @@
 
 ## REQUIREMENTS
 
-- Operating System: Windows/Linux/Mac
+- Operating System: Windows/Linux
 - Software: Python (minimum: 3.12), Sqlite3
 
 ## USED
@@ -34,11 +34,11 @@
 1. Use ***pip install -r requirements.txt*** for install libs.
 2. [Download sqlite3](https://medium.com/@techwithjulles/part-5-how-to-install-sqlite-on-your-machine-windows-linux-and-mac-simple-version-f05b7963b6cd).
 3. [Download tkiter](https://www.geeksforgeeks.org/how-to-install-tkinter-on-linux/) (Linux only).
-4. Enjoy!!!
+5. Enjoy!!!
 
 ## USE GUID
 
-1. Run main.py.
+1. Open a cmd/consol and enter: python main.py
 2. Choose between cli and gui version.
 3. Add dates to the database (use the built-in database client for correct date formats).
 4. Configure the server (using the built-in configurator).
