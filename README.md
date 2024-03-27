@@ -9,10 +9,6 @@
 - The application also has a built-in database client, configurator and config manager.
 - I made the app because I couldn't remember important dates.
 
-## SUPPORT
-
-- [Discord MRM Studio](https://discord.gg/SK8Z3uV72k)
-
 ## REQUIREMENTS
 
 - Operating System: Windows/Linux
