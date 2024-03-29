@@ -23,7 +23,7 @@
 
 ## SHOWCASE
 
-- [YouTube](https://www.youtube.com/watch?v=LR8n6aVRQ28&feature=youtu.be)
+- [Streamable](https://streamable.com/8jb670?t=0&src=player-page-share)
 
 ## INSTALL GUID
 
