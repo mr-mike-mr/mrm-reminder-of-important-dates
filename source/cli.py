@@ -3,6 +3,7 @@ try: # try import packages
     # EXTERNAL
     from os import system
     from time import sleep
+    from json import dumps
     # OWN
     import functions
 except ImportError as error: # error handle
@@ -10,25 +11,72 @@ except ImportError as error: # error handle
     sleep(3600) # sleep 1h
     exit(1)
 
+# NUMBER INPUT FUNC
+def num_input(text = None, value = None): # text = input text for cli version ; value = value to check for gui versions
+    # CLI VERSION
+    while 1:
+        try: # try convert input to int
+            value = int(input(text))
+            return value
+        except: # error handle
+            print('Input must be number!\n')
+
+# SAVE CONFIG FUNC
+def save_config():
+    try: # try dump and save config
+        ConfigJson = dumps(functions.Config) # call dumps function from json for serialize object to a json formatted string
+        with open("../data/config.json", "w") as config_file: # opens config.json file and return a stream
+            config_file.write(ConfigJson) # call dumps function from json for write ConfigJson into config.json
+            print("Config save successful!\n")
+            return True
+    except: # error handle
+        functions.error('Config save failed')
+
+# ADD DATE (FOR DATABASE) FUNC
+def add_date(text, date, warn_date): # text = text for insert into database ; date = date for insert into database ; warn_date = warn date for insert into database
+    db = functions.DatabaseConnect() # call DatabaseConnect func for connect/open database
+
+    try: # try insert data into database.db for Dates table
+        db[1].execute("INSERT INTO Dates (text, date, `warn_date`) VALUES (?, ?, ?)", (text, date, warn_date)) # call execute func from sqlite3 for run insert sql query
+        db[0].commit() # call commit func from sqlite3 for confirm change
+    except: # error handle
+        error('Add new date into database failed')
+
+    functions.DatabaseDisconnect(db[0]) # call DatabaseDisconnect func for disconnect/close database
+    return True
+
+# REMOVE DATE (FOR DATABASE) FUNC
+def remove_data(id): # id = to remove from database
+    db = functions.DatabaseConnect() # call DatabaseConnect func for connect/open database
+
+    try: # try remove data from database.db for Dates table
+        db[1].execute(f"DELETE from Dates where id = {id}") # call execute func from sqlite3 for run delete sql query
+        db[0].commit() # call commit func from sqlite3 for confirm change
+    except: # error handle
+        error('Removed date in database failed')
+
+    functions.DatabaseDisconnect(db[0]) # call DatabaseDisconnect func for disconnect/close database
+    return True
+
 # CLI DATABASE CLIENT FUNC
 def cli_databaseclient():
     # DATA INPUT FUNC
     def _date_input(day_input, month_input, year_input):
         # DAY
         while 1:
-            day = functions.NumInput(f"{day_input} > ") # call NumInput func from functions.py for number value
+            day = num_input(f"{day_input} > ") # call num_input for number value
             if day >= 0 and day <= 31: # if day more or equal to 0 and less or equal to 31 then
                 break
             else:
                 print("Wrong day!\n")
         # MONTH
         while 1:
-            month = functions.NumInput(f"{month_input} > ") # call NumInput func from functions.py for number value
+            month = num_input(f"{month_input} > ") # call num_input for number value
             if month >= 0 and month <= 12: # if month more or equal to 0 and less or equal to 12 then
                 break
             print("Wrong month!\n")
         # YEAR
-        year = functions.NumInput(f"{year_input} > ") # call NumInput func from functions.py for number value
+        year = num_input(f"{year_input} > ") # call num_input for number value
 
         return f'{day}.{month}.{year}' # return formatted date
 
@@ -50,7 +98,7 @@ def cli_databaseclient():
         print('1|Add Date')
         print('2|Remove Date')
         print('3|Back')
-        option = functions.NumInput('\nSelect option > ') # call NumInput func from functions.py for number value
+        option = num_input('\nSelect option > ') # call num_input for number value
 
         # OPTION CONDITION
         if option == 1: # if option is 1 then
@@ -60,15 +108,15 @@ def cli_databaseclient():
                 warn_date = _date_input('Warn day', 'Warn month', 'Warn year') # call _date_input func for date value
 
                 print(f"Adding a date '{text}' - '{date} ({warn_date})'...")
-                functions.AddDate(text, date, warn_date) # call AddDate func from functions.py for add date into database
+                add_date(text, date, warn_date) # call AddDate func from functions.py for add date into database
                 print(f"Data '{date} - {text}' added!")
                 sleep(2)
         elif option == 2: # if option is 2 then
             if functions.Verify('Want to remove the date [Y/n]? > '): # if return value from Verify func from functions.py is true then
-                id = functions.NumInput('\nDate id > ') # call NumInput func from functions.py for number value
+                id = num_input('\nDate id > ') # call num_input for number value
 
                 print(f"Removing a date '{id}'...")
-                functions.RemoveData(id) # call RemoveData func from functions.py for remove date from database
+                remove_data(id) # call RemoveData func from functions.py for remove date from database
                 print(f"Date '{id}' removed!")
                 sleep(2)
         elif option == 3: # if option is 3 then
@@ -85,13 +133,13 @@ def cli_config():
     print('### Reminder of Important Dates | CONFIG ###')
 
     # CONFIG
-    functions.Config['REFRESH_TIME'] = functions.NumInput('\nEnter server refresh time [hod.]? > ') * 3600 # call NumInput func from functions.py for number value, convert from seconds to hours and save into Config['SMTP_PORT'] from functions.py
+    functions.Config['REFRESH_TIME'] = num_input('\nEnter server refresh time [hod.]? > ') * 3600 # call num_input for number value, convert from seconds to hours and save into Config['SMTP_PORT'] from functions.py
     # EMAIL CONFIG
     if functions.Verify('\nWant email notifications [Y/n]? > '): # if return value from Verify func from functions.py is true then
         while 1:
             # INPUTS
             functions.Config['SMTP_SERVER'] = str(input('Enter smtp server > ')) # get input and save into Config['SMTP_SERVER'] from functions.py
-            functions.Config['SMTP_PORT'] = functions.NumInput('Enter smtp port > ') # call NumInput func from functions.py for number value and save into Config['SMTP_PORT'] from functions.py
+            functions.Config['SMTP_PORT'] = num_input('Enter smtp port > ') # call num_input for number value and save into Config['SMTP_PORT'] from functions.py
             functions.Config['SMTP_EMAIL'] = str(input('Enter smtp email > ')) # get input and save into Config['SMTP_EMAIL'] from functions.py
             functions.Config['SMTP_PASSWORD'] = str(input('Enter smtp password > ')) # get input and save into Config['SMTP_PASSWORD'] from functions.py
             functions.Config['SMTP_CLIENT_EMAIL'] = str(input('Enter your email > ')) # get input and save into Config['SMTP_CLIENT_EMAIL'] from functions.py
@@ -120,7 +168,7 @@ def cli_config():
                 functions.Config['NOTIFY']['DISCORD'] = True # change value in Config['NOTIFY']['DISCORD'] in functions.py
                 break
 
-    functions.SaveConfig() # call SaveConfig func from functions.py for save config
+    save_config() # call save_config for save config
     CliPanel() # call CliPanel func for return to panel
 
 # CLI PANEL FUNC
@@ -136,7 +184,7 @@ def CliPanel():
         print('2|Config')
         print('3|Server')
         print('4|Exit')
-        option = functions.NumInput('\nSelect option > ') # call NumInput func from functions.py for number input
+        option = num_input('\nSelect option > ') # call num_input number input
 
         # OPTION CONDITION
         if option == 1: # if option is 1 then
@@ -148,8 +196,7 @@ def CliPanel():
         elif option == 3: # if option is 3 then
             if functions.Verify('Want to start a server [Y/n]? > '): # if return value from Verify func from functions.py is true then
                 system(functions._ClearCmd) # get clear command from _ClearCmd from functions.py and clear consol
-                print('### Reminder of Important Dates | SERVER ###')
-                functions.Server() # call Server func from functions.py for run server
+                pass # TODO: make subrocess
         elif option == 4: # if option is 4 then
             if functions.Verify('Want to exit [Y/n]? > '): # if return value from Verify func from functions.py is true then
                 exit(1)
