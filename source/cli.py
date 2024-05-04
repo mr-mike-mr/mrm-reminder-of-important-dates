@@ -4,6 +4,8 @@ try: # try import packages
     from os import system
     from time import sleep
     from json import dumps
+    import subprocess
+    import sys
     # OWN
     import functions
 except ImportError as error: # error handle
@@ -196,7 +198,8 @@ def CliPanel():
         elif option == 3: # if option is 3 then
             if functions.Verify('Want to start a server [Y/n]? > '): # if return value from Verify func from functions.py is true then
                 system(functions._ClearCmd) # get clear command from _ClearCmd from functions.py and clear consol
-                pass # TODO: make subrocess
+                subprocess.Popen(['python', 'server.py']) # run server.py as a subprocess
+                sys.exit() # exit from cli.py
         elif option == 4: # if option is 4 then
             if functions.Verify('Want to exit [Y/n]? > '): # if return value from Verify func from functions.py is true then
                 exit(1)
